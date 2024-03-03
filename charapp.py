@@ -52,7 +52,7 @@ if file is not None:
 
     # Make prediction
     if st.button('Predict'):
-        pred_prob = model.predict_prob([img])
+        pred_prob = model.predict_proba([img])
         n = st.slider('Select Top N Predictions', min_value=1, max_value=len(hindi_character), value=3, step=1)
 
         class_name, confidence = get_n_predictions(pred_prob[0], n)

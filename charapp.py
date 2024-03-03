@@ -1,12 +1,11 @@
 import streamlit as st
 import numpy as np
 from PIL import Image, ImageOps
-#import cv2
-pip install scikit-learn
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+import joblib
 
 # Set the Page Title
 st.set_page_config(
@@ -20,9 +19,9 @@ hindi_character = 'क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण �
 # Load the trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    return StandardScaler(), PCA(n_components=0.98), SVC(C=0.1, kernel='linear')
+    return joblib.load('best_svc_classifier_model.joblib')
 
-scaler, pca, model = load_model()
+model = load_model()
 
 # Load and preprocess the image
 def load_and_prep(file):
@@ -30,8 +29,6 @@ def load_and_prep(file):
     img = ImageOps.invert(img)  # Invert image colors
     img = img.resize((32, 32))  # Resize image
     img = np.array(img).flatten()  # Flatten image
-    img = scaler.transform([img])  # Scale image
-    img = pca.transform(img)  # Apply PCA
     return img
 
 # Get top n predictions
@@ -55,7 +52,7 @@ if file is not None:
 
     # Make prediction
     if st.button('Predict'):
-        pred_prob = model.predict_proba(img)
+        pred_prob = model.predict_proba([img])
         n = st.slider('Select Top N Predictions', min_value=1, max_value=len(hindi_character), value=3, step=1)
 
         class_name, confidence = get_n_predictions(pred_prob[0], n)

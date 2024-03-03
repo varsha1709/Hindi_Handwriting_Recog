@@ -19,7 +19,7 @@ hindi_character = 'क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण �
 # Load the trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    return joblib.load('best_svc_classifier_model.joblib')
+    return joblib.load('MyModels/best_svc_classifier_model.joblib')
 
 model = load_model()
 

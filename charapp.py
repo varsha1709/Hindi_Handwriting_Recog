@@ -23,20 +23,13 @@ def load_model():
 
 model = load_model()
 
-# # Load and preprocess the image
-# def load_and_prep(file):
-#     img = Image.open(file).convert('L')  # Convert image to grayscale
-#     img = ImageOps.invert(img)  # Invert image colors
-#     img = img.resize((32, 32))  # Resize image
-#     img = np.array(img).flatten()  # Flatten image
-#     return img
-
-
 # Load and preprocess the image
 def load_and_prep(file):
     img = Image.open(file).convert('L')  # Convert image to grayscale
-    return np.array(img)  # Return the image as it is
-
+    img = ImageOps.invert(img)  # Invert image colors
+    img = img.resize((32, 32))  # Resize image
+    img = np.array(img).flatten()  # Flatten image
+    return img
 
 # Get top n predictions
 def get_n_predictions(pred_prob, n):

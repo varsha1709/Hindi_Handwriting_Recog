@@ -67,7 +67,6 @@
 
 
 
-
 import streamlit as st
 import numpy as np
 from PIL import Image, ImageOps
@@ -99,8 +98,10 @@ def load_and_prep(file):
         img = Image.open(file).convert('L')  # Convert image to grayscale
         img = ImageOps.invert(img)  # Invert image colors
         img = img.resize((32, 32))  # Resize image
-        img = np.array(img).flatten()  # Flatten image
-        return img
+        img_array = np.array(img).flatten()  # Flatten image
+        # Use PCA to reduce dimensionality to match model's input features
+        img_pca = pca.transform([img_array])
+        return img_pca
     except Exception as e:
         st.error(f"Error loading or preprocessing image: {e}")
         return None
@@ -128,8 +129,8 @@ if file is not None:
         # Make prediction
         if st.button('Predict'):
             try:
-                pred_label = model.predict([img])[0]
-                pred_prob = model.predict_proba([img])
+                pred_label = model.predict(img)[0]
+                pred_prob = model.predict_proba(img)
 
                 n = st.slider('Select Top N Predictions', min_value=1, max_value=len(hindi_character), value=3, step=1)
 
@@ -141,3 +142,4 @@ if file is not None:
                     st.write(f"{class_name[i]}: {confidence[i]*100:.2f}%")
             except Exception as e:
                 st.error(f"Error during prediction: {e}")
+

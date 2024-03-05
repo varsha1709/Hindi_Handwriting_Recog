@@ -92,11 +92,8 @@ def load_model():
 
 model = load_model()
 
-# Initialize PCA for dimensionality reduction
-pca = PCA(n_components=293)  # Assuming 293 features expected by the SVC model
-
 # Load and preprocess the image
-def load_and_prep(file):
+def load_and_prep(file, pca):
     try:
         img = Image.open(file).convert('L')  # Convert image to grayscale
         img = ImageOps.invert(img)  # Invert image colors
@@ -123,7 +120,9 @@ st.title("Hindi Character Recognition")
 file = st.file_uploader("Upload Image", type=['png', 'jpg', 'jpeg'])
 
 if file is not None:
-    img = load_and_prep(file)
+    pca = joblib.load('MyModels/pca_model.joblib')  # Load the fitted PCA model
+
+    img = load_and_prep(file, pca)
 
     if img is not None:
         # Display uploaded image
@@ -145,4 +144,3 @@ if file is not None:
                     st.write(f"{class_name[i]}: {confidence[i]*100:.2f}%")
             except Exception as e:
                 st.error(f"Error during prediction: {e}")
-

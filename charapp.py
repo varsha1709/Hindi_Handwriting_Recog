@@ -92,6 +92,9 @@ def load_model():
 
 model = load_model()
 
+# Initialize PCA for dimensionality reduction
+pca = PCA(n_components=293)  # Assuming 293 features expected by the SVC model
+
 # Load and preprocess the image
 def load_and_prep(file):
     try:

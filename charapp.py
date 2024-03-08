@@ -67,6 +67,7 @@
 
 
 
+
 import streamlit as st
 import numpy as np
 from PIL import Image, ImageOps
@@ -144,3 +145,8 @@ if file is not None:
                     st.write(f"{class_name[i]}: {confidence[i]*100:.2f}%")
             except Exception as e:
                 st.error(f"Error during prediction: {e}")
+                # Add debugging statements
+                st.error(f"Image shape: {img.shape}")
+                st.error(f"Predicted probabilities shape: {pred_prob.shape}")
+                st.error(f"Predicted label: {pred_label}")
+
